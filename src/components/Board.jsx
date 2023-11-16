@@ -1,6 +1,49 @@
 import React, { useState } from 'react'
 import '../css/Board.css'
 
+export const haveWon = (char, rowId, boxId, pl) => {
+  // Check row
+  let win = true;
+  for (let i = 0; i < pl[rowId].length; i++) {
+    if (pl[rowId][i] !== char) {
+      win = false;
+      break;
+    }
+  }
+  if (win) return true;
+
+  // Check column
+  win = true;
+  for (let j = 0; j < pl.length; j++) {
+    if (pl[j][boxId] !== char) {
+      win = false;
+      break;
+    }
+  }
+  if (win) return true;
+
+  // Check diagonal (top-left to bottom-right)
+  if (rowId === boxId) {
+    for (let i = 0; i < pl.length; i++) {
+      if (pl[i][i] !== char) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  // Check diagonal (top-right to bottom-left)
+  if (rowId + boxId === pl.length - 1) {
+    for (let i = 0; i < pl.length; i++) {
+      if (pl[i][pl.length - 1 - i] !== char) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+};
+
 export const Board = () => {
   const [isEnded, setIsEnded] = useState([false, '']);
   const [count, setCount] = useState(0)
@@ -10,50 +53,6 @@ export const Board = () => {
     ['','',''],
     ['','',''],
   ]);
-
-  const haveWon = (char, rowId, boxId, pl) => {
-    // Check row
-    let win = true;
-    for (let i = 0; i < pl[rowId].length; i++) {
-      if (pl[rowId][i] !== char) {
-        win = false;
-        break;
-      }
-    }
-    if (win) return true;
-  
-    // Check column
-    win = true;
-    for (let j = 0; j < pl.length; j++) {
-      if (pl[j][boxId] !== char) {
-        win = false;
-        break;
-      }
-    }
-    if (win) return true;
-  
-    // Check diagonal (top-left to bottom-right)
-    if (rowId === boxId) {
-      for (let i = 0; i < pl.length; i++) {
-        if (pl[i][i] !== char) {
-          return false;
-        }
-      }
-      return true;
-    }
-  
-    // Check diagonal (top-right to bottom-left)
-    if (rowId + boxId === pl.length - 1) {
-      for (let i = 0; i < pl.length; i++) {
-        if (pl[i][pl.length - 1 - i] !== char) {
-          return false;
-        }
-      }
-      return true;
-    }
-
-  };
-  
 
   const handleClick = (boxId, rowId) => {
     if (isEnded[0]) return;
