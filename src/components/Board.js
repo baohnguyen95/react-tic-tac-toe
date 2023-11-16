@@ -34,29 +34,24 @@ export const Board = () => {
   
     // Check diagonal (top-left to bottom-right)
     if (rowId === boxId) {
-      win = true;
       for (let i = 0; i < pl.length; i++) {
         if (pl[i][i] !== char) {
-          win = false;
-          break;
+          return false;
         }
       }
-      if (win) return true;
+      return true;
     }
   
     // Check diagonal (top-right to bottom-left)
     if (rowId + boxId === pl.length - 1) {
-      win = true;
       for (let i = 0; i < pl.length; i++) {
         if (pl[i][pl.length - 1 - i] !== char) {
-          win = false;
-          break;
+          return false;
         }
       }
-      if (win) return true;
+      return true;
     }
-  
-    return false;
+
   };
   
 
@@ -69,6 +64,7 @@ export const Board = () => {
     // otherwise, create a deep copy of playField, and update the played box
     const newPlayField = playField.map(row => [...row])
     newPlayField[rowId][boxId] = char;
+
     // Check for win or tie before toggling turn and incrementing count
     if (haveWon(char, rowId, boxId, newPlayField)) {
       setIsEnded([true, `${char} wins`]);
@@ -78,6 +74,7 @@ export const Board = () => {
         setIsEnded([true, 'Tie!']);
       }
     }
+    // update the board
     setPlayField(newPlayField)
 
     // this step make sure we play X and O interchangeably
